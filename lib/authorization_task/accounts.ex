@@ -15,8 +15,8 @@ defmodule AuthorizationTask.Accounts do
 
   end
 
-  def get_by_email(email) do
-    query = from u in User, where: u.email == ^email
+  def get_by_username(username) do
+    query = from u in User, where: u.username == ^username
 
     case Repo.one(query) do
       nil -> {:error, :not_found}
@@ -28,8 +28,8 @@ defmodule AuthorizationTask.Accounts do
     User |> Repo.get!(id)
   end
 
-  def authenticate_user(email, password) do
-    with{:ok, user} <- get_by_email(email) do
+  def authenticate_user(username, password) do
+    with{:ok, user} <- get_by_username(username) do
       case validate_password(password, user.password) do
         false -> {:error, :unauthorized}
         true -> {:ok, user}

@@ -6,8 +6,8 @@ defmodule AuthorizationTaskWeb.SessionController do
 
   action_fallback AuthorizationTaskWeb.FallbackController
 
-  def new(conn, %{"email" => email, "password" => password}) do
-    case Accounts.authenticate_user(email, password) do
+  def new(conn, %{"username" => username, "password" => password}) do
+    case Accounts.authenticate_user(username, password) do
       {:ok, user} ->
         {:ok, access_token, _claims} =
           Guardian.encode_and_sign(user, %{}, token_type: "access", ttl: {15, :minute})
