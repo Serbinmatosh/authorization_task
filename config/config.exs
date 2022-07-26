@@ -13,7 +13,7 @@ config :authorization_task,
 # Configures the endpoint
 config :authorization_task, AuthorizationTaskWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "rSSv1l3U59jEqhStXnKGIQWjGowz4CiBHC9Ap0YQLqRc4h5XNUqWCKkXv9HgdW/c",
+  secret_key_base: "iQ1Hjc3CJXfF0pDtpKNKoMkOWVuCFkXQi4lJUAfp2oBhLU8oD1sY3JH7sYNpLo6C",
   render_errors: [view: AuthorizationTaskWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: AuthorizationTask.PubSub,
   live_view: [signing_salt: "9LhwoXwH"]
