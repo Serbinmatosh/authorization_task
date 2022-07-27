@@ -6,20 +6,27 @@ defmodule AuthorizationTaskWeb.SessionController do
 
   action_fallback AuthorizationTaskWeb.FallbackController
 
+
+  # Function called when attempting to create a new Session
   def new(conn, %{"username" => username, "password" => password}) do
+
+    # Switch statement, checks if user is in the DB
     case Accounts.authenticate_user(username, password) do
       {:ok, user} ->
+        #If user is in the DB, creates a new Token
         {:ok, access_token, _claims} =
           Guardian.encode_and_sign(user, %{}, token_type: "access", ttl: {15, :minute})
 
           {:ok, refresh_token, _claims} =
           Guardian.encode_and_sign(user, %{}, token_type: "refresh", ttl: {7, :day})
 
+          # Return of the Token
           conn
           |> put_resp_cookie("ruid", refresh_token)
           |> put_status(:created)
           |> render("token.json", access_token: access_token)
 
+      # Error handling if user not present in DB
       {:error, :unauthorized} ->
         body = Jason.encode!(%{error: "unauthorized"})
 
@@ -28,6 +35,7 @@ defmodule AuthorizationTaskWeb.SessionController do
     end
   end
 
+  # Refreshes the Token for security reasons
   def refresh(conn, _params) do
     refresh_token =
       Plug.Conn.fetch_cookies(conn) |> Map.from_struct() |> get_in([:cookies, "ruid"])
@@ -46,6 +54,7 @@ defmodule AuthorizationTaskWeb.SessionController do
       end
   end
 
+  # Deletes a Token / Logs out the User
   def delete(conn, _params) do
     conn
     |> delete_resp_cookie("ruid")

@@ -12,14 +12,20 @@ defmodule AuthorizationTaskWeb.Router do
   scope "/api", AuthorizationTaskWeb do
     pipe_through :api
 
+    # Endpoint for registering a user
     post "/users", UserController, :register
+
+    # Endpoint for starting a new session
     post "/session/new", SessionController, :new
   end
 
   scope "/api", AuthorizationTaskWeb do
     pipe_through [:api, :auth]
 
+    # Endpoint for refreshing a session Token
     post "/session/refresh", SessionController, :refresh
+
+    # Endpoint for deleting a Token
     post "/session/delete", SessionController, :delete
   end
 

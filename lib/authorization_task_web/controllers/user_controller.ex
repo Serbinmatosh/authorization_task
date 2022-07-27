@@ -6,6 +6,9 @@ defmodule AuthorizationTaskWeb.UserController do
 
   action_fallback AuthorizationTaskWeb.FallbackController
 
+  # Function called when attempting to register a User
+  # Attempts to add an Account into the DB and returns
+  # a message if successful
   def register(conn, %{"user" => user_params}) do
     with {:ok, user} <- Accounts.create_user(user_params) do
       conn
